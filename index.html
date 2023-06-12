@@ -1,0 +1,81 @@
+<head>
+<link rel="stylesheet" href="styles.css">
+    <style>
+        code {
+            font-family: Consolas,"courier new";
+            color: black;
+            background-color: #f1f1f1;
+            padding: 2px;
+			font-size: 14px;
+			margin: -2px;
+		}
+		div {
+			margin: 0px;
+		}
+		td, th {
+			padding: 0px;
+			margin: 0px;
+		}
+    </style>
+    <meta charset="UTF-8">
+    <title>Skrypt inicjujący</title>
+</head>
+<body>
+<h4>Skrypt zakładający bazę danych</h4>
+<pre><code>
+DROP TABLE IF EXISTS FILM CASCADE;
+DROP TABLE IF EXISTS SEANS CASCADE;
+DROP TABLE IF EXISTS REZERWACJA CASCADE;
+DROP TABLE IF EXISTS KLIENT CASCADE;
+DROP TABLE IF EXISTS SALA_KINOWA CASCADE;
+DROP TABLE IF EXISTS KASJER CASCADE;
+
+CREATE TABLE FILM (
+  ID INTEGER PRIMARY KEY,
+  tytul VARCHAR(32) NOT NULL,
+  rezyser VARCHAR(32) NOT NULL,
+  typ varchar(16) NOT NULL,
+  czas_wyswietlania INTEGER NOT NULL CHECK (czas_wyswietlania >= 0),
+  opis VARCHAR(512)
+);
+
+CREATE TABLE KLIENT (
+  ID INTEGER PRIMARY KEY,
+  imie VARCHAR(16) NOT NULL,
+  nazwisko VARCHAR(16) NOT NULL
+);
+
+CREATE TABLE SALA_KINOWA (
+  numer INTEGER PRIMARY KEY,
+  liczba_miejsc INTEGER NOT NULL CHECK (liczba_miejsc >= 0)
+);
+
+CREATE TABLE SEANS (
+  ID INTEGER PRIMARY KEY,
+  godzina_rozpoczecia TIME NOT NULL,
+  dzien_tygodnia VARCHAR(2),
+  film_id INTEGER NOT NULL,
+  FOREIGN KEY (film_id) REFERENCES FILM,
+  sala_id INTEGER NOT NULL,
+  FOREIGN KEY (sala_id) REFERENCES SALA_KINOWA
+ );
+ 
+ CREATE TABLE REZERWACJA (
+   ID INTEGER PRIMARY KEY,
+   ile_miejsc INTEGER CHECK (ile_miejsc >= 0),
+   akceptacja BOOLEAN,
+   seans_id INTEGER,
+   klient_id INTEGER NOT NULL,
+   FOREIGN KEY (klient_id) REFERENCES KLIENT,
+   FOREIGN KEY (seans_id) REFERENCES SEANS
+);
+ 
+CREATE TABLE KASJER (
+  ID INTEGER PRIMARY KEY,
+  imie VARCHAR(16) NOT NULL,
+  nazwisko VARCHAR(16) NOT NULL
+);
+</code></pre>
+
+
+</body>
